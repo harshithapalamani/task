@@ -25,7 +25,7 @@ export default function Newsletter() {
 
     return (
         <form onSubmit={onSubmit} className="relative space-y-4 bg-white p-6 rounded-2xl shadow-lg">
-            <img src="/shapes/Ellipse 28.svg" alt="" className="pointer-events-none absolute -top-3 -left-3 w-12 opacity-30" />
+            <img src="/images/Ellipse%2028.svg" alt="" className="pointer-events-none absolute -top-3 -left-3 w-12 opacity-30" />
             <h3 className="text-xl font-semibold flex items-center gap-2">
                 <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-indigo-600 text-white text-sm">@</span>
                 Subscribe to Newsletter

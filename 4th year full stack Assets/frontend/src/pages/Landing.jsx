@@ -116,8 +116,8 @@ export default function Landing() {
                         ))}
                     </div>
                 </div>
-                <img src="/shapes/Ellipse 24.svg" alt="" className="absolute -top-6 -left-6 w-20 opacity-30" />
-                <img src="/shapes/Ellipse 25.svg" alt="" className="absolute -bottom-8 -right-10 w-16 opacity-20" />
+                <img src="/shapes/Ellipse%2024.svg" alt="" className="absolute -top-6 -left-6 w-20 opacity-30" />
+                <img src="/shapes/Ellipse%2025.svg" alt="" className="absolute -bottom-8 -right-10 w-16 opacity-20" />
             </section>
 
             {/* Happy Clients */}
@@ -129,8 +129,8 @@ export default function Landing() {
                         <ClientCard key={c._id} client={c} />
                     ))}
                 </div>
-                <img src="/shapes/Ellipse 27.svg" alt="" className="absolute -top-6 -right-6 w-14 opacity-20" />
-                <img src="/shapes/Ellipse 22.svg" alt="" className="absolute -bottom-6 -left-6 w-14 opacity-20" />
+                <img src="/shapes/Ellipse%2027.svg" alt="" className="absolute -top-6 -right-6 w-14 opacity-20" />
+                <img src="/shapes/Ellipse%2022.svg" alt="" className="absolute -bottom-6 -left-6 w-14 opacity-20" />
             </section>
 
             {/* Gallery */}

@@ -27,7 +27,7 @@ export default function ContactForm() {
 
     return (
         <form onSubmit={onSubmit} className="relative space-y-4 bg-white p-6 rounded-2xl shadow-lg">
-            <img src="/shapes/Ellipse 22.svg" alt="" className="pointer-events-none absolute -top-3 -right-3 w-16 opacity-30" />
+            <img src="/shapes/Ellipse%2022.svg" alt="" className="pointer-events-none absolute -top-3 -right-3 w-16 opacity-30" />
             <h3 className="text-xl font-semibold flex items-center gap-2">
                 <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-indigo-600 text-white text-sm">✉</span>
                 Contact Us

@@ -1,12 +1,12 @@
-import { toAssetUrl, fallbackImage } from '../lib/assets';
+import { toAssetUrl, placeholderImage } from '../lib/assets';
 
-export default function ProjectCard({ project, onClick, className = '' }) {
+export default function ProjectCard({ project, onClick, className = '', index }) {
     return (
         <div className={`bg-white rounded-2xl shadow p-4 border border-gray-100 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition ${className}`} onClick={() => onClick && onClick(project)}>
             <img
-                src={toAssetUrl(project.image) || fallbackImage('project')}
+                src={toAssetUrl(project.image) || placeholderImage('project', project._id || index)}
                 alt={project.name}
-                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = fallbackImage('project'); }}
+                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImage('project', project._id || index); }}
                 className="w-full h-44 object-cover rounded-xl"
             />
             <h3 className="mt-3 text-lg font-semibold">{project.name}</h3>
