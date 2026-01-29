@@ -11,6 +11,7 @@ import IntroSection from '../components/IntroSection';
 import GallerySection from '../components/GallerySection';
 import AboutSection from '../components/AboutSection';
 import FooterCTA from '../components/FooterCTA';
+import Footer from '../components/Footer';
 
 export default function Landing() {
     const [projects, setProjects] = useState([]);
@@ -111,8 +112,8 @@ export default function Landing() {
                         ref={projectsRef}
                         className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 no-scrollbar"
                     >
-                        {projects.map((p) => (
-                            <ProjectCard key={p._id} project={p} onClick={setSelectedProject} className="min-w-[280px] snap-start" />
+                        {projects.map((p, i) => (
+                            <ProjectCard key={p._id || i} project={p} index={i} onClick={setSelectedProject} className="min-w-[300px] snap-start" />
                         ))}
                     </div>
                 </div>
@@ -124,7 +125,7 @@ export default function Landing() {
             <section className="relative">
                 <h2 className="text-2xl font-bold mb-4">Happy Clients</h2>
                 {loading && <p>Loading...</p>}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {clients.map((c, i) => (
                         <ClientCard key={c._id || i} client={c} index={i} />
                     ))}
@@ -151,6 +152,7 @@ export default function Landing() {
 
             {/* Footer CTA */}
             <FooterCTA />
+            <Footer />
 
             {/* Project Modal */}
             <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
