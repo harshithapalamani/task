@@ -450,7 +450,7 @@ export default function Admin() {
             <DataLists />
 
             {/* Forms */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div id="admin-forms" className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <AddProject />
                 <AddClient />
             </div>
