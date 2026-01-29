@@ -1,19 +1,34 @@
 import { toAssetUrl, placeholderImage } from '../lib/assets';
 
 export default function ClientCard({ client, index }) {
+    const imgSrc = toAssetUrl(client?.image) || placeholderImage('client', client?._id || index);
     return (
-        <div className="relative bg-white rounded-2xl border border-gray-200 shadow-sm p-6 hover:shadow-md hover:-translate-y-0.5 transition">
-            <img src="/shapes/Ellipse%2022.svg" alt="" className="pointer-events-none absolute -top-3 -right-3 w-12 opacity-20" />
-            <div className="flex flex-col items-center text-center">
+        <div className="relative rounded-2xl bg-gradient-to-br from-white to-indigo-50/30 border border-gray-200/80 shadow-sm p-5 md:p-6 hover:shadow-md hover:-translate-y-0.5 transition">
+            <img src="/shapes/Ellipse%2022.svg" alt="" className="pointer-events-none absolute -top-3 -right-3 w-10 opacity-20" />
+            <div className="flex items-center gap-4">
                 <img
-                    src={toAssetUrl(client.image) || placeholderImage('client', client._id || index)}
-                    alt={client.name}
-                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImage('client', client._id || index); }}
-                    className="w-20 h-20 object-cover rounded-full ring-2 ring-indigo-500/40"
+                    src={imgSrc}
+                    alt={client?.name}
+                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImage('client', client?._id || index); }}
+                    className="w-16 h-16 md:w-18 md:h-18 object-cover rounded-full ring-2 ring-indigo-500/30"
                 />
-                <h3 className="mt-3 text-lg font-semibold">{client.name}</h3>
-                <span className="mt-1 inline-block px-2 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700">{client.designation}</span>
-                <p className="mt-2 text-sm text-gray-700 max-w-xs">{client.description}</p>
+                <div className="min-w-0">
+                    <h3 className="text-base md:text-lg font-semibold truncate">{client?.name}</h3>
+                    {client?.designation && (
+                        <span className="mt-1 inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700">
+                            {client.designation}
+                        </span>
+                    )}
+                </div>
+            </div>
+            {client?.description && (
+                <p className="mt-3 text-sm text-gray-700 line-clamp-3">
+                    {client.description}
+                </p>
+            )}
+            <div className="mt-4 flex items-center gap-1 text-amber-500">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.922-.755 1.688-1.54 1.118l-2.802-2.036a1 1 0 00-1.175 0l-2.802 2.036c-.784.57-1.838-.196-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.88 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                <span className="text-xs text-gray-600">Trusted Client</span>
             </div>
         </div>
     );
