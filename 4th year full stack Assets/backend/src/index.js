@@ -19,7 +19,7 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 const defaultAllowedOrigins = [
   CLIENT_URL,
   'http://localhost:5173',
-  'https://*.vercel.app',
+  '*.vercel.app',
 ];
 const allowedOrigins = (process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map((s) => s.trim())
@@ -31,12 +31,25 @@ app.use(
       // Allow non-browser requests (e.g., curl/Postman) and same-origin
       if (!origin) return callback(null, true);
 
+      let hostname;
+      try {
+        hostname = new URL(origin).hostname;
+      } catch {
+        hostname = origin;
+      }
+
       const isAllowed = allowedOrigins.some((allowed) => {
-        // Wildcard subdomain support: "*.vercel.app"
-        if (allowed.startsWith('*.')) {
-          const base = allowed.slice(2);
-          return origin.endsWith(base);
+        if (!allowed) return false;
+        // Strip scheme if present
+        const normalized = allowed.replace(/^[a-z]+:\/\//i, '');
+        // Wildcard subdomain support: "*.example.com" or "https://*.example.com"
+        if (normalized.startsWith('*.')) {
+          const base = normalized.slice(2);
+          return hostname.endsWith(base) && hostname !== base;
         }
+        // Exact hostname match
+        if (hostname === normalized) return true;
+        // Fallback to exact origin string match
         return origin === allowed;
       });
 
