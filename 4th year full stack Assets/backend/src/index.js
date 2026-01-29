@@ -15,11 +15,15 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 // Support multiple origins (local dev, Vercel preview/prod) via ALLOWED_ORIGINS
-// Example: ALLOWED_ORIGINS="http://localhost:5173,https://your-app.vercel.app,*.vercel.app"
-const allowedOrigins = (process.env.ALLOWED_ORIGINS || CLIENT_URL || '')
-  .split(',')
-  .map((s) => s.trim())
-  .filter(Boolean);
+// Example: ALLOWED_ORIGINS="http://localhost:5173,https://your-app.vercel.app,https://*.vercel.app"
+const defaultAllowedOrigins = [
+  CLIENT_URL,
+  'http://localhost:5173',
+  'https://*.vercel.app',
+];
+const allowedOrigins = (process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map((s) => s.trim())
+  : defaultAllowedOrigins).filter(Boolean);
 
 app.use(
   cors({
@@ -36,7 +40,7 @@ app.use(
         return origin === allowed;
       });
 
-      return isAllowed ? callback(null, true) : callback(new Error('Not allowed by CORS'));
+      return isAllowed ? callback(null, true) : callback(new Error(`Not allowed by CORS: ${origin}`));
     },
     optionsSuccessStatus: 204,
   })
