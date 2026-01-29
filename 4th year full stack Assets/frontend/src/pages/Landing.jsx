@@ -124,9 +124,9 @@ export default function Landing() {
             <section className="relative">
                 <h2 className="text-2xl font-bold mb-4">Happy Clients</h2>
                 {loading && <p>Loading...</p>}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {clients.map((c) => (
-                        <ClientCard key={c._id} client={c} />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {clients.map((c, i) => (
+                        <ClientCard key={c._id || i} client={c} index={i} />
                     ))}
                 </div>
                 <img src="/shapes/Ellipse%2027.svg" alt="" className="absolute -top-6 -right-6 w-14 opacity-20" />
