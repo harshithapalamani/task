@@ -35,7 +35,12 @@ const envAllowedOrigins = (process.env.ALLOWED_ORIGINS || '')
   .filter(Boolean);
 // Prefer env allowlist; fallback to defaults
 const allowedOrigins = envAllowedOrigins.length ? envAllowedOrigins : defaultAllowedOrigins;
-console.log('CORS allowed origins (exact match):', allowedOrigins);
+// Derive hostnames from allowed origins
+const allowedHostnames = allowedOrigins.map((o) => {
+  try { return new URL(o).hostname; } catch { return o; }
+});
+console.log('CORS allowed origins:', allowedOrigins);
+console.log('CORS allowed hostnames:', allowedHostnames);
 
 app.use(
   cors({
@@ -44,10 +49,18 @@ app.use(
       if (!origin) return callback(null, true);
       console.log('CORS Origin:', origin);
 
-      if (allowedOrigins.includes(origin)) {
+      let hostname;
+      try { hostname = new URL(origin).hostname; } catch { hostname = origin; }
+
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        allowedHostnames.includes(hostname) ||
+        hostname.endsWith('vercel.app'); // allow changing Vercel preview URLs for this project
+
+      if (isAllowed) {
         return callback(null, true);
       }
-      console.warn('CORS denied for origin:', origin, 'allowed:', allowedOrigins);
+      console.warn('CORS denied for origin:', origin, 'allowed:', allowedOrigins, 'hostnames:', allowedHostnames);
       return callback(new Error(`Not allowed by CORS: ${origin}`));
     },
     optionsSuccessStatus: 204,
