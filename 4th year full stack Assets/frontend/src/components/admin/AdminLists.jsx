@@ -77,6 +77,7 @@ export default function AdminLists() {
 
     return (
         <div className="bg-white p-5 rounded-2xl shadow">
+            <h3 className="text-lg font-semibold mb-3">Clients & Projects</h3>
             <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                     <button

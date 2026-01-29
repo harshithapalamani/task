@@ -443,17 +443,17 @@ export default function Admin() {
                 <StatCard icon="/icons/Group.svg" label="Subscribers" value={counts.subscribers} />
             </div>
 
-            {/* Forms */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <AddProject />
-                <AddClient />
-            </div>
-
             {/* Lists */}
             <DataLists />
 
             {/* Clients & Projects Lists for Admin */}
             <AdminLists />
+
+            {/* Forms */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <AddProject />
+                <AddClient />
+            </div>
         </div>
     );
 }
