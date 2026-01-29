@@ -69,6 +69,25 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   })
 );
+
+// Ensure CORS headers are present even on error responses
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin) {
+    let hostname;
+    try { hostname = new URL(origin).hostname; } catch { hostname = origin; }
+    const isAllowed =
+      allowedOrigins.includes(origin) ||
+      allowedHostnames.includes(hostname) ||
+      hostname.endsWith('vercel.app');
+    if (isAllowed) {
+      res.header('Access-Control-Allow-Origin', origin);
+      res.header('Access-Control-Allow-Credentials', 'true');
+      res.header('Vary', 'Origin');
+    }
+  }
+  next();
+});
 // Ensure preflight requests are handled for all routes
 app.options('*', cors());
 app.use(express.json());

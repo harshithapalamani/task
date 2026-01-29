@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../lib/api';
 import AdminHeader from '../components/admin/AdminHeader';
 import StatCard from '../components/admin/StatCard';
+import AdminLists from '../components/admin/AdminLists';
 
 function Login({ onLoggedIn }) {
     const navigate = useNavigate();
@@ -450,6 +451,9 @@ export default function Admin() {
 
             {/* Lists */}
             <DataLists />
+
+            {/* Clients & Projects Lists for Admin */}
+            <AdminLists />
         </div>
     );
 }

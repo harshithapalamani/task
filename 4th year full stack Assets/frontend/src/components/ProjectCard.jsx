@@ -12,6 +12,8 @@ export default function ProjectCard({ project, onClick, className = '', index })
                     alt={project.name}
                     onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImage('project', project._id || index); }}
                     className="w-full h-48 object-cover"
+                    loading="lazy"
+                    decoding="async"
                 />
                 {/* gradient overlay for readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>

@@ -11,6 +11,8 @@ export default function ClientCard({ client, index }) {
                     alt={client?.name}
                     onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImage('client', client?._id || index); }}
                     className="w-16 h-16 md:w-18 md:h-18 object-cover rounded-full ring-2 ring-indigo-500/30"
+                    loading="lazy"
+                    decoding="async"
                 />
                 <div className="min-w-0">
                     <h3 className="text-base md:text-lg font-semibold truncate">{client?.name}</h3>

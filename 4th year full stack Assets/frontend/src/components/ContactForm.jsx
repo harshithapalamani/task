@@ -43,7 +43,22 @@ export default function ContactForm() {
                 </div>
                 <div className="relative">
                     <img src="/icons/home.svg" alt="" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-60" />
-                    <input className={inputBase} name="mobile" placeholder="Mobile Number" value={form.mobile} onChange={onChange} required />
+                    <input
+                        className={inputBase}
+                        name="mobile"
+                        placeholder="Mobile Number"
+                        value={form.mobile}
+                        onChange={(e) => {
+                            // allow digits only
+                            const digitsOnly = e.target.value.replace(/\D+/g, '');
+                            setForm({ ...form, mobile: digitsOnly });
+                        }}
+                        inputMode="numeric"
+                        pattern="^\\d{10}$"
+                        maxLength={10}
+                        title="Enter a 10-digit mobile number"
+                        required
+                    />
                 </div>
                 <div className="relative">
                     <img src="/icons/paintbrush-2.svg" alt="" className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 opacity-60" />
