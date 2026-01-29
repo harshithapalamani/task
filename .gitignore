@@ -1,0 +1,46 @@
+# General
+node_modules/
+**/node_modules/
+
+# Builds
+**/dist/
+**/dist-ssr/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Env files (keep examples)
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# OS/editor
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local tools
+.vercel
+
+# App data
+backend/uploads/
+
+# Original asset drop folders (exclude from repo)
+/Lead Generation Landing page (Icons)/
+/Lead Generation Landing page (Images)/
+/Lead Generation Landing page (shapes)/
