@@ -1,0 +1,12 @@
+# Backend ignore
+/node_modules/
+/uploads/
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Logs
+logs
+*.log
