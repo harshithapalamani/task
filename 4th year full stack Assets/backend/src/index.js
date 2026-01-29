@@ -11,6 +11,18 @@ const authRoutes = require('./routes/auth');
 const { errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
+// Permissive preflight: always respond to OPTIONS with CORS headers
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    const origin = req.headers.origin || '*';
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
@@ -40,6 +52,8 @@ app.use(
     },
     optionsSuccessStatus: 204,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   })
 );
 // Ensure preflight requests are handled for all routes
