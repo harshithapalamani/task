@@ -1,11 +1,12 @@
-import { toAssetUrl } from '../lib/assets';
+import { toAssetUrl, fallbackImage } from '../lib/assets';
 
 export default function ClientCard({ client }) {
     return (
         <div className="bg-white rounded-2xl shadow p-4 border border-gray-100 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition">
             <img
-                src={toAssetUrl(client.image)}
+                src={toAssetUrl(client.image) || fallbackImage('client')}
                 alt={client.name}
+                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = fallbackImage('client'); }}
                 className="w-20 h-20 object-cover rounded-full mx-auto"
             />
             <h3 className="mt-3 text-base font-semibold text-center">{client.name}</h3>

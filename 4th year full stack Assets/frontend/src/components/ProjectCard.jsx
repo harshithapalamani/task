@@ -1,11 +1,12 @@
-import { toAssetUrl } from '../lib/assets';
+import { toAssetUrl, fallbackImage } from '../lib/assets';
 
 export default function ProjectCard({ project, onClick, className = '' }) {
     return (
         <div className={`bg-white rounded-2xl shadow p-4 border border-gray-100 cursor-pointer hover:shadow-lg hover:-translate-y-0.5 transition ${className}`} onClick={() => onClick && onClick(project)}>
             <img
-                src={toAssetUrl(project.image)}
+                src={toAssetUrl(project.image) || fallbackImage('project')}
                 alt={project.name}
+                onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = fallbackImage('project'); }}
                 className="w-full h-44 object-cover rounded-xl"
             />
             <h3 className="mt-3 text-lg font-semibold">{project.name}</h3>

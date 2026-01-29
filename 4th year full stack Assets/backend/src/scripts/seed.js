@@ -52,8 +52,9 @@ async function main() {
   for (const c of clients) {
     await Client.updateOne({ name: c.name }, { $setOnInsert: c }, { upsert: true });
   }
-
-  console.log('Seed data inserted/ensured.');
+  const projCount = await Project.countDocuments();
+  const clientCount = await Client.countDocuments();
+  console.log(`Seed complete. Projects: ${projCount}, Clients: ${clientCount}`);
   process.exit(0);
 }
 
