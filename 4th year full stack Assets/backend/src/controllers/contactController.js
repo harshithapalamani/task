@@ -89,7 +89,7 @@ async function createContact(req, res, next) {
       return res.status(400).json({ error: 'Missing fields' });
     }
     const created = await Contact.create({ fullName, email, mobile, city });
-    res.status(201).json({ message: 'Submitted successfully', data: created });
+    res.status(201).json({ message: "We'll reach out within one business day.", data: created });
   } catch (err) {
     next(err);
   }

@@ -14,8 +14,33 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+// Support multiple origins (local dev, Vercel preview/prod) via ALLOWED_ORIGINS
+// Example: ALLOWED_ORIGINS="http://localhost:5173,https://your-app.vercel.app,*.vercel.app"
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || CLIENT_URL || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
 
-app.use(cors({ origin: CLIENT_URL }));
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow non-browser requests (e.g., curl/Postman) and same-origin
+      if (!origin) return callback(null, true);
+
+      const isAllowed = allowedOrigins.some((allowed) => {
+        // Wildcard subdomain support: "*.vercel.app"
+        if (allowed.startsWith('*.')) {
+          const base = allowed.slice(2);
+          return origin.endsWith(base);
+        }
+        return origin === allowed;
+      });
+
+      return isAllowed ? callback(null, true) : callback(new Error('Not allowed by CORS'));
+    },
+    optionsSuccessStatus: 204,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

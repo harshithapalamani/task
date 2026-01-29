@@ -57,6 +57,7 @@ Backend (`backend/.env`):
 - `MONGODB_URI=mongodb://localhost:27017/campus_assignment`
 - `JWT_SECRET=...`
 - `CLIENT_URL=http://localhost:5173`
+- `ALLOWED_ORIGINS=http://localhost:5173,https://your-app.vercel.app,*.vercel.app`
 - `ADMIN_EMAIL=admin@example.com`
 - `ADMIN_PASSWORD=admin123`
 
@@ -88,7 +89,8 @@ Below are two straightforward, production-friendly paths.
     - `PORT=5000`
     - `MONGODB_URI=<Your Atlas SRV URI>`
     - `JWT_SECRET=<random long string>`
-    - `CLIENT_URL=<Your Netlify site URL>`
+    - `CLIENT_URL=<Your Vercel site URL>`
+    - `ALLOWED_ORIGINS=<Your Vercel site URL>,*.vercel.app`
     - `ADMIN_EMAIL=<admin email>`
     - `ADMIN_PASSWORD=<admin password>`
   - Optional: add a persistent disk and mount `/app/uploads` if you want uploads to survive deploys.
@@ -104,7 +106,7 @@ Below are two straightforward, production-friendly paths.
 Notes
 
 - Keep Atlas Network Access updated (add your Render egress IP or allow access from anywhere if acceptable for a demo).
-- CORS: ensure `CLIENT_URL` matches your Vercel public URL.
+- CORS: set `CLIENT_URL` to your main frontend URL and `ALLOWED_ORIGINS` to include local dev and wildcard for Vercel previews (e.g., `*.vercel.app`).
 
 ### Option B: Docker (local or server VM)
 
