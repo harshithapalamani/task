@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: campus-assignment-backend
+    env: node
+    plan: free
+    region: oregon
+    rootDir: "4th year full stack Assets/backend"
+    buildCommand: "npm install"
+    startCommand: "node src/index.js"
+    disk:
+      name: uploads
+      mountPath: /app/uploads
+      sizeGB: 1
+    envVars:
+      - key: PORT
+        value: "5000"
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false

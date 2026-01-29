@@ -22,6 +22,15 @@ app.use(express.urlencoded({ extended: true }));
 // Serve uploaded images statically
 app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
+app.get('/', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Backend is running 🚀',
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
