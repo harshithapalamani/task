@@ -16,14 +16,14 @@ const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 // Support multiple origins (local dev, Vercel preview/prod) via ALLOWED_ORIGINS
 // Example: ALLOWED_ORIGINS="http://localhost:5173,https://your-app.vercel.app,https://*.vercel.app"
-const defaultAllowedOrigins = [
-  CLIENT_URL,
-  'http://localhost:5173',
-  '*.vercel.app',
-];
-const allowedOrigins = (process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(',').map((s) => s.trim())
-  : defaultAllowedOrigins).filter(Boolean);
+const defaultAllowedOrigins = [CLIENT_URL, 'http://localhost:5173', '*.vercel.app'];
+const envAllowedOrigins = (process.env.ALLOWED_ORIGINS || '')
+  .split(',')
+  .map((s) => s.trim())
+  .filter(Boolean);
+// Merge env + defaults, de-duplicate
+const allowedOrigins = Array.from(new Set([...defaultAllowedOrigins, ...envAllowedOrigins]));
+console.log('CORS allowed origins:', allowedOrigins);
 
 app.use(
   cors({
@@ -37,6 +37,7 @@ app.use(
       } catch {
         hostname = origin;
       }
+      console.log('CORS check origin:', origin, 'hostname:', hostname);
 
       const isAllowed = allowedOrigins.some((allowed) => {
         if (!allowed) return false;
@@ -53,7 +54,11 @@ app.use(
         return origin === allowed;
       });
 
-      return isAllowed ? callback(null, true) : callback(new Error(`Not allowed by CORS: ${origin}`));
+      if (isAllowed) {
+        return callback(null, true);
+      }
+      console.warn('CORS denied for origin:', origin, 'allowed:', allowedOrigins);
+      return callback(new Error(`Not allowed by CORS: ${origin}`));
     },
     optionsSuccessStatus: 204,
   })
