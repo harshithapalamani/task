@@ -1,35 +1,32 @@
-import { toAssetUrl, placeholderImage } from '../lib/assets';
+import { toAssetUrl } from '../lib/assets';
 import { useState } from 'react';
 
-export default function ClientCard({ client, index }) {
-    const placeholderKey = client?._id || index;
-    let imgSrc = toAssetUrl(client?.image);
-    if (!imgSrc) imgSrc = placeholderImage('client', placeholderKey);
+export default function ClientCard({ client }) {
+    const imgSrc = toAssetUrl(client?.image);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     return (
         <div className="relative rounded-2xl bg-gradient-to-br from-white to-indigo-50/30 border border-gray-200/80 shadow-sm p-5 md:p-6 hover:shadow-md hover:-translate-y-0.5 transition">
             <img src="/shapes/Ellipse%2022.svg" alt="" className="pointer-events-none absolute -top-3 -right-3 w-10 opacity-20" />
             <div className="flex items-center gap-4">
                 <div className="relative">
-                    {loading && (
+                    {loading && !error && (
                         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 animate-pulse rounded-full w-16 h-16 md:w-18 md:h-18 z-10">
                             <span className="w-8 h-8 rounded-full bg-gray-200" />
                         </div>
                     )}
-                    <img
-                        src={imgSrc}
-                        alt={client?.name}
-                        onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = placeholderImage('client', placeholderKey);
-                            setLoading(false);
-                        }}
-                        onLoad={() => setLoading(false)}
-                        className="w-16 h-16 md:w-18 md:h-18 object-cover rounded-full ring-2 ring-indigo-500/30"
-                        loading="lazy"
-                        decoding="async"
-                        style={loading ? { visibility: 'hidden' } : {}}
-                    />
+                    {!error && (
+                        <img
+                            src={imgSrc}
+                            alt={client?.name}
+                            onError={() => { setError(true); setLoading(false); }}
+                            onLoad={() => setLoading(false)}
+                            className="w-16 h-16 md:w-18 md:h-18 object-cover rounded-full ring-2 ring-indigo-500/30"
+                            loading="lazy"
+                            decoding="async"
+                            style={loading ? { visibility: 'hidden' } : {}}
+                        />
+                    )}
                 </div>
                 <div className="min-w-0">
                     <h3 className="text-base md:text-lg font-semibold truncate">{client?.name}</h3>

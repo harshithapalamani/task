@@ -1,36 +1,33 @@
-import { toAssetUrl, placeholderImage } from '../lib/assets';
+import { toAssetUrl } from '../lib/assets';
 import { useState } from 'react';
 
 export default function ProjectCard({ project, onClick, className = '', index }) {
-    const placeholderKey = project?._id || index;
-    let imgSrc = toAssetUrl(project?.image);
-    if (!imgSrc) imgSrc = placeholderImage('project', placeholderKey);
+    const imgSrc = toAssetUrl(project?.image);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     return (
         <div
             className={`relative bg-white rounded-2xl shadow border border-gray-100 cursor-pointer overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition ${className}`}
             onClick={() => onClick && onClick(project)}
         >
             <div className="relative">
-                {loading && (
+                {loading && !error && (
                     <div className="absolute inset-0 flex items-center justify-center bg-gray-100 animate-pulse rounded w-full h-48 z-10">
                         <span className="w-12 h-12 rounded-full bg-gray-200" />
                     </div>
                 )}
-                <img
-                    src={imgSrc}
-                    alt={project.name}
-                    onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = placeholderImage('project', placeholderKey);
-                        setLoading(false);
-                    }}
-                    onLoad={() => setLoading(false)}
-                    className="w-full h-48 object-cover"
-                    loading="lazy"
-                    decoding="async"
-                    style={loading ? { visibility: 'hidden' } : {}}
-                />
+                {!error && (
+                    <img
+                        src={imgSrc}
+                        alt={project.name}
+                        onError={() => { setError(true); setLoading(false); }}
+                        onLoad={() => setLoading(false)}
+                        className="w-full h-48 object-cover"
+                        loading="lazy"
+                        decoding="async"
+                        style={loading ? { visibility: 'hidden' } : {}}
+                    />
+                )}
                 {/* gradient overlay for readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent"></div>
                 {/* decorative shape */}
