@@ -11,8 +11,8 @@ async function listProjects(req, res, next) {
     const baseUrl = `https://${host}`;
     const mapped = items.map((p) => {
       let imgPath = p.image || '';
-      // Remove any leading slashes and duplicate 'uploads/'
-      imgPath = imgPath.replace(/^\/|^uploads[\/]+|^\/uploads[\/]+/, '');
+      // Remove all leading slashes and all leading 'uploads/'
+      imgPath = imgPath.replace(/^\/*(uploads\/*)*/i, '');
       if (imgPath && !imgPath.startsWith('http')) {
         imgPath = `${baseUrl}/uploads/${imgPath}`;
       }

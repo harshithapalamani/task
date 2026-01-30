@@ -11,8 +11,8 @@ async function listClients(req, res, next) {
     const baseUrl = `https://${host}`;
     const mapped = items.map((c) => {
       let imgPath = c.image || '';
-      // Remove any leading slashes and duplicate 'uploads/'
-      imgPath = imgPath.replace(/^\/|^uploads[\/]+|^\/uploads[\/]+/, '');
+      // Remove all leading slashes and all leading 'uploads/'
+      imgPath = imgPath.replace(/^\/*(uploads\/*)*/i, '');
       if (imgPath && !imgPath.startsWith('http')) {
         imgPath = `${baseUrl}/uploads/${imgPath}`;
       }
