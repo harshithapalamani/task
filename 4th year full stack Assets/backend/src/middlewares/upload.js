@@ -15,9 +15,11 @@ async function processImage(req, res, next) {
     const filename = `${Date.now()}_${Math.random().toString(36).slice(2)}${ext}`;
     const filepath = path.join(uploadsDir, filename);
 
-    // Enforce 450x350 with cover fit (crop to ratio)
+    // Resize to 450x350. Default: 'contain' to avoid cropping.
+    // Set IMAGE_FIT=cover in env to enable cropping behavior.
+    const fitMode = (process.env.IMAGE_FIT || 'contain').toLowerCase() === 'cover' ? 'cover' : 'contain';
     await sharp(req.file.buffer)
-      .resize(450, 350, { fit: 'cover' })
+      .resize(450, 350, { fit: fitMode, background: { r: 255, g: 255, b: 255, alpha: 1 } })
       .toFile(filepath);
 
     // Public URL path for static serving
