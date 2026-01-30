@@ -8,7 +8,8 @@ function normalizeBase(url) {
 export function toAssetUrl(path) {
   const apiBase = normalizeBase(import.meta.env.VITE_API_URL);
   const hostBase = apiBase.replace(/\/?api\/?$/, '/');
-  if (!path) return hostBase; // fallback to host for empty
+  // If no image path, return null so callers can fall back to placeholders
+  if (!path) return null;
   try {
     return new URL(path, hostBase).toString();
   } catch {
