@@ -13,7 +13,20 @@ async function connectDB() {
   await mongoose.connect(uri, {
     autoIndex: true,
   });
-  console.log('MongoDB connected');
+  const conn = mongoose.connection;
+  const mask = (s) => {
+    try {
+      // hide credentials between // and @
+      return String(s).replace(/(mongodb(?:\+srv)?:\/\/)([^@]+)@/i, (_, p1) => p1 + '***@');
+    } catch {
+      return '***';
+    }
+  };
+  console.log('MongoDB connected', {
+    dbName: conn?.name,
+    host: conn?.host,
+    uri: mask(process.env.MONGODB_URI),
+  });
 }
 
 module.exports = { connectDB };
