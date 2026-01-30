@@ -29,8 +29,6 @@ To access the admin panel, use the following credentials:
 - **Contact Form Details**: View all contact form submissions.
 - **Subscribed Emails**: View all newsletter subscribers.
 
-### (Optional Bonus)
-
 - **Image Cropping**: Images uploaded from the admin panel are cropped to a specific ratio before being stored.
 
 ---
@@ -129,4 +127,5 @@ To access the admin panel, use the following credentials:
 ## Contact
 
 For any queries, contact: harshithapalamani@gmail.com
+
 
