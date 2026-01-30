@@ -6,10 +6,17 @@ async function listClients(req, res, next) {
   try {
     const items = await Client.find().sort({ createdAt: -1 });
     // Build full image URL for each client
-    const baseUrl = req.protocol + '://' + req.get('host');
+    // Always use HTTPS for image URLs
+    const host = req.get('host');
+    const baseUrl = `https://${host}`;
     const mapped = items.map((c) => {
-      const imageUrl = c.image ? (c.image.startsWith('http') ? c.image : `${baseUrl}/uploads/${c.image.replace(/^uploads[\/]/, '')}`) : '';
-      return { ...c.toObject(), image: imageUrl };
+      let imgPath = c.image || '';
+      // Remove any leading slashes and duplicate 'uploads/'
+      imgPath = imgPath.replace(/^\/|^uploads[\/]+|^\/uploads[\/]+/, '');
+      if (imgPath && !imgPath.startsWith('http')) {
+        imgPath = `${baseUrl}/uploads/${imgPath}`;
+      }
+      return { ...c.toObject(), image: imgPath };
     });
     res.json(mapped);
   } catch (err) {

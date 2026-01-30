@@ -6,10 +6,17 @@ async function listProjects(req, res, next) {
   try {
     const items = await Project.find().sort({ createdAt: -1 });
     // Build full image URL for each project
-    const baseUrl = req.protocol + '://' + req.get('host');
+    // Always use HTTPS for image URLs
+    const host = req.get('host');
+    const baseUrl = `https://${host}`;
     const mapped = items.map((p) => {
-      const imageUrl = p.image ? (p.image.startsWith('http') ? p.image : `${baseUrl}/uploads/${p.image.replace(/^uploads[\/]/, '')}`) : '';
-      return { ...p.toObject(), image: imageUrl };
+      let imgPath = p.image || '';
+      // Remove any leading slashes and duplicate 'uploads/'
+      imgPath = imgPath.replace(/^\/|^uploads[\/]+|^\/uploads[\/]+/, '');
+      if (imgPath && !imgPath.startsWith('http')) {
+        imgPath = `${baseUrl}/uploads/${imgPath}`;
+      }
+      return { ...p.toObject(), image: imgPath };
     });
     res.json(mapped);
   } catch (err) {
