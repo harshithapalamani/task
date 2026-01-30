@@ -1,7 +1,10 @@
 import { toAssetUrl, placeholderImage } from '../lib/assets';
 
 export default function ClientCard({ client, index }) {
-    const imgSrc = toAssetUrl(client?.image) || placeholderImage('client', client?._id || index);
+    // Always use a stable key for placeholder (prefer _id, fallback to index)
+    const placeholderKey = client?._id || index;
+    let imgSrc = toAssetUrl(client?.image);
+    if (!imgSrc) imgSrc = placeholderImage('client', placeholderKey);
     return (
         <div className="relative rounded-2xl bg-gradient-to-br from-white to-indigo-50/30 border border-gray-200/80 shadow-sm p-5 md:p-6 hover:shadow-md hover:-translate-y-0.5 transition">
             <img src="/shapes/Ellipse%2022.svg" alt="" className="pointer-events-none absolute -top-3 -right-3 w-10 opacity-20" />
@@ -9,7 +12,10 @@ export default function ClientCard({ client, index }) {
                 <img
                     src={imgSrc}
                     alt={client?.name}
-                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImage('client', client?._id || index); }}
+                    onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = placeholderImage('client', placeholderKey);
+                    }}
                     className="w-16 h-16 md:w-18 md:h-18 object-cover rounded-full ring-2 ring-indigo-500/30"
                     loading="lazy"
                     decoding="async"

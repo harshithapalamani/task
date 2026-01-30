@@ -1,6 +1,10 @@
 import { toAssetUrl, placeholderImage } from '../lib/assets';
 
 export default function ProjectCard({ project, onClick, className = '', index }) {
+    // Always use a stable key for placeholder (prefer _id, fallback to index)
+    const placeholderKey = project?._id || index;
+    let imgSrc = toAssetUrl(project?.image);
+    if (!imgSrc) imgSrc = placeholderImage('project', placeholderKey);
     return (
         <div
             className={`relative bg-white rounded-2xl shadow border border-gray-100 cursor-pointer overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition ${className}`}
@@ -8,9 +12,12 @@ export default function ProjectCard({ project, onClick, className = '', index })
         >
             <div className="relative">
                 <img
-                    src={toAssetUrl(project.image) || placeholderImage('project', project._id || index)}
+                    src={imgSrc}
                     alt={project.name}
-                    onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = placeholderImage('project', project._id || index); }}
+                    onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = placeholderImage('project', placeholderKey);
+                    }}
                     className="w-full h-48 object-cover"
                     loading="lazy"
                     decoding="async"
