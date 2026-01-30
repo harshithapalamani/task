@@ -48,4 +48,58 @@ async function deleteClient(req, res, next) {
   }
 }
 
-module.exports = { listClients, createClient, deleteClient };
+function buildClientFilterAndSort(query) {
+  const q = (query.q || '').trim();
+  const filter = {};
+  if (q) {
+    const rx = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    filter.$or = [
+      { name: rx },
+      { designation: rx },
+      { description: rx },
+    ];
+  }
+
+  const sortable = new Set(['createdAt', 'name', 'designation']);
+  const sortBy = sortable.has(query.sortBy) ? query.sortBy : 'createdAt';
+  const sortDir = query.sortDir === 'asc' ? 1 : -1;
+  const sort = { [sortBy]: sortDir };
+
+  return { filter, sort };
+}
+
+async function exportClients(req, res, next) {
+  try {
+    const { filter, sort } = buildClientFilterAndSort(req.query);
+    const items = await Client.find(filter).sort(sort).lean();
+
+    const rows = [
+      ['Name', 'Designation', 'Description', 'Image', 'Created At'],
+      ...items.map((c) => [
+        c.name || '',
+        c.designation || '',
+        c.description || '',
+        c.image || '',
+        c.createdAt ? new Date(c.createdAt).toISOString() : '',
+      ]),
+    ];
+
+    const escapeCSV = (val) => {
+      const s = String(val);
+      if (/[",\n]/.test(s)) {
+        return '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    };
+
+    const csv = rows.map((r) => r.map(escapeCSV).join(',')).join('\n');
+    const filename = `clients_export_${Date.now()}.csv`;
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send('\uFEFF' + csv);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { listClients, createClient, deleteClient, exportClients };

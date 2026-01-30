@@ -47,4 +47,56 @@ async function deleteProject(req, res, next) {
   }
 }
 
-module.exports = { listProjects, createProject, deleteProject };
+function buildProjectFilterAndSort(query) {
+  const q = (query.q || '').trim();
+  const filter = {};
+  if (q) {
+    const rx = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i');
+    filter.$or = [
+      { name: rx },
+      { description: rx },
+    ];
+  }
+
+  const sortable = new Set(['createdAt', 'name']);
+  const sortBy = sortable.has(query.sortBy) ? query.sortBy : 'createdAt';
+  const sortDir = query.sortDir === 'asc' ? 1 : -1;
+  const sort = { [sortBy]: sortDir };
+
+  return { filter, sort };
+}
+
+async function exportProjects(req, res, next) {
+  try {
+    const { filter, sort } = buildProjectFilterAndSort(req.query);
+    const items = await Project.find(filter).sort(sort).lean();
+
+    const rows = [
+      ['Name', 'Description', 'Image', 'Created At'],
+      ...items.map((p) => [
+        p.name || '',
+        p.description || '',
+        p.image || '',
+        p.createdAt ? new Date(p.createdAt).toISOString() : '',
+      ]),
+    ];
+
+    const escapeCSV = (val) => {
+      const s = String(val);
+      if (/[",\n]/.test(s)) {
+        return '"' + s.replace(/"/g, '""') + '"';
+      }
+      return s;
+    };
+
+    const csv = rows.map((r) => r.map(escapeCSV).join(',')).join('\n');
+    const filename = `projects_export_${Date.now()}.csv`;
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send('\uFEFF' + csv);
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { listProjects, createProject, deleteProject, exportProjects };

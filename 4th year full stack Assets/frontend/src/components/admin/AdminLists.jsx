@@ -41,6 +41,11 @@ export default function AdminLists() {
             await api.delete(`/projects/${id}`);
             setProjects((prev) => prev.filter((p) => p._id !== id));
         } catch (err) {
+            if (err.response?.status === 404) {
+                // If not found, treat as already deleted and update UI
+                setProjects((prev) => prev.filter((p) => p._id !== id));
+                return;
+            }
             alert(err.response?.data?.error || 'Failed to delete project');
         }
     };
@@ -77,6 +82,10 @@ export default function AdminLists() {
             await api.delete(`/clients/${id}`);
             setClients((prev) => prev.filter((c) => c._id !== id));
         } catch (err) {
+            if (err.response?.status === 404) {
+                setClients((prev) => prev.filter((c) => c._id !== id));
+                return;
+            }
             alert(err.response?.data?.error || 'Failed to delete client');
         }
     };
@@ -140,6 +149,30 @@ export default function AdminLists() {
                         onChange={(e) => setQuery(e.target.value)}
                     />
                 </div>
+            </div>
+            <div className="mb-3 flex items-center justify-end">
+                <button
+                    className="text-xs bg-gray-800 text-white px-3 py-1.5 rounded-lg hover:bg-gray-900 transition"
+                    onClick={async () => {
+                        try {
+                            const endpoint = tab === 'projects' ? '/projects/export' : '/clients/export';
+                            const { data } = await api.get(endpoint, { responseType: 'blob' });
+                            const blob = new Blob([data], { type: 'text/csv;charset=utf-8;' });
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `${tab}_export_${Date.now()}.csv`;
+                            document.body.appendChild(a);
+                            a.click();
+                            a.remove();
+                            window.URL.revokeObjectURL(url);
+                        } catch (err) {
+                            alert(err.response?.data?.error || 'Failed to export CSV');
+                        }
+                    }}
+                >
+                    Export CSV ({tab})
+                </button>
             </div>
             {loading ? (
                 <p className="text-sm text-gray-600">Loading…</p>
