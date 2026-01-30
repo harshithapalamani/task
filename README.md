@@ -128,8 +128,4 @@ To access the admin panel, use the following credentials:
 
 ## Contact
 
-For any queries, contact: [your email]
-
----
-
-Replace the placeholders (like deployment links, MongoDB URI, and your email) with your actual details before submission. This README will help reviewers understand, run, and evaluate your project efficiently.
+For any queries, contact: harshithapalamani@gmail.com
