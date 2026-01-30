@@ -19,7 +19,7 @@ This is a full-stack web application featuring a landing page and an admin panel
 
 To access the admin panel, use the following credentials:
 
-- **Username:** admin
+- **Username:** admin@example.com
 - **Password:** admin123
 
 ### Admin Panel
@@ -129,3 +129,4 @@ To access the admin panel, use the following credentials:
 ## Contact
 
 For any queries, contact: harshithapalamani@gmail.com
+
