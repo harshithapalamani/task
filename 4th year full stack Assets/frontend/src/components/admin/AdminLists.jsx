@@ -150,7 +150,7 @@ export default function AdminLists() {
                     />
                 </div>
             </div>
-            <div className="mb-3 flex items-center justify-end">
+            <div className="mb-3 flex items-center justify-end gap-2">
                 <button
                     className="text-xs bg-gray-800 text-white px-3 py-1.5 rounded-lg hover:bg-gray-900 transition"
                     onClick={async () => {
@@ -172,6 +172,23 @@ export default function AdminLists() {
                     }}
                 >
                     Export CSV ({tab})
+                </button>
+                <button
+                    className="text-xs bg-red-600 text-white px-3 py-1.5 rounded-lg hover:bg-red-700 transition"
+                    onClick={async () => {
+                        const sure = window.confirm(`Delete ALL ${tab}? This cannot be undone.`);
+                        if (!sure) return;
+                        try {
+                            const endpoint = tab === 'projects' ? '/projects' : '/clients';
+                            await api.delete(endpoint);
+                            if (tab === 'projects') setProjects([]);
+                            else setClients([]);
+                        } catch (err) {
+                            alert(err.response?.data?.error || 'Failed to delete all');
+                        }
+                    }}
+                >
+                    Delete All ({tab})
                 </button>
             </div>
             {loading ? (

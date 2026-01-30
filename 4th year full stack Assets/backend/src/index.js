@@ -8,6 +8,7 @@ const clientRoutes = require('./routes/clients');
 const contactRoutes = require('./routes/contacts');
 const subscriberRoutes = require('./routes/subscribers');
 const authRoutes = require('./routes/auth');
+const debugRoutes = require('./routes/debug');
 const { errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
@@ -107,6 +108,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/debug', debugRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/clients', clientRoutes);
 app.use('/api/contacts', contactRoutes);

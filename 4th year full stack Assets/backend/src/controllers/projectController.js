@@ -99,4 +99,23 @@ async function exportProjects(req, res, next) {
   }
 }
 
-module.exports = { listProjects, createProject, deleteProject, exportProjects };
+async function deleteAllProjects(req, res, next) {
+  try {
+    const items = await Project.find({}, { image: 1 }).lean();
+    for (const it of items) {
+      if (it.image) {
+        try {
+          const filename = path.basename(it.image);
+          const filePath = path.join(__dirname, '..', '..', 'uploads', filename);
+          if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+        } catch (_) {}
+      }
+    }
+    await Project.deleteMany({});
+    res.json({ deleted: items.length });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { listProjects, createProject, deleteProject, exportProjects, deleteAllProjects };

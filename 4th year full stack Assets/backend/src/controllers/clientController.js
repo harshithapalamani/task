@@ -102,4 +102,23 @@ async function exportClients(req, res, next) {
   }
 }
 
-module.exports = { listClients, createClient, deleteClient, exportClients };
+async function deleteAllClients(req, res, next) {
+  try {
+    const items = await Client.find({}, { image: 1 }).lean();
+    for (const it of items) {
+      if (it.image) {
+        try {
+          const filename = path.basename(it.image);
+          const filePath = path.join(__dirname, '..', '..', 'uploads', filename);
+          if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+        } catch (_) {}
+      }
+    }
+    await Client.deleteMany({});
+    res.json({ deleted: items.length });
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { listClients, createClient, deleteClient, exportClients, deleteAllClients };
