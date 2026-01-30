@@ -29,17 +29,29 @@ export default function ClientsSection({ clients = [], loading }) {
             <div className="flex items-center justify-between mb-4">
                 <h2 className="text-2xl font-bold">Happy Clients</h2>
                 <div className="hidden md:flex items-center gap-2">
-                    <button aria-label="Scroll left" className="h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center hover:bg-gray-50" onClick={() => trackRef.current?.scrollBy({ left: -400, behavior: 'smooth' })}>‹</button>
-                    <button aria-label="Scroll right" className="h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center hover:bg-gray-50" onClick={() => trackRef.current?.scrollBy({ left: 400, behavior: 'smooth' })}>›</button>
+                    <button
+                        aria-label="Scroll left"
+                        className={`h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center transition-all ${canLeft ? 'hover:bg-gray-50 cursor-pointer opacity-100' : 'opacity-40 cursor-default'}`}
+                        onClick={() => trackRef.current?.scrollBy({ left: -400, behavior: 'smooth' })}
+                    >
+                        ‹
+                    </button>
+                    <button
+                        aria-label="Scroll right"
+                        className={`h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center transition-all ${canRight ? 'hover:bg-gray-50 cursor-pointer opacity-100' : 'opacity-40 cursor-default'}`}
+                        onClick={() => trackRef.current?.scrollBy({ left: 400, behavior: 'smooth' })}
+                    >
+                        ›
+                    </button>
                 </div>
             </div>
             {loading && <p>Loading...</p>}
             <div className="relative">
                 {canLeft && (
-                    <div className="pointer-events-none absolute left-0 top-0 h-full w-10 bg-gradient-to-r from-white/95 to-white/0"></div>
+                    <div className="pointer-events-none absolute left-0 top-0 h-full w-10 bg-gradient-to-r from-white/95 to-white/0 z-10"></div>
                 )}
                 {canRight && (
-                    <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-white/95 to-white/0"></div>
+                    <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-white/95 to-white/0 z-10"></div>
                 )}
                 <div ref={trackRef} className="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 no-scrollbar">
                     {clients.map((c, i) => (
@@ -49,8 +61,8 @@ export default function ClientsSection({ clients = [], loading }) {
                     ))}
                 </div>
             </div>
-            <img src="/shapes/Ellipse%2027.svg" alt="" className="absolute -top-6 -right-6 w-14 opacity-20" />
-            <img src="/shapes/Ellipse%2022.svg" alt="" className="absolute -bottom-6 -left-6 w-14 opacity-20" />
+            <img src="/shapes/Ellipse%2027.svg" alt="" className="pointer-events-none absolute -top-6 -right-6 w-14 opacity-20" />
+            <img src="/shapes/Ellipse%2022.svg" alt="" className="pointer-events-none absolute -bottom-6 -left-6 w-14 opacity-20" />
         </section>
     );
 }

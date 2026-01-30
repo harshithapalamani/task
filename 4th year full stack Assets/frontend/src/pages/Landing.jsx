@@ -60,7 +60,7 @@ export default function Landing() {
             el.removeEventListener('scroll', updateScrollState);
             window.removeEventListener('resize', updateScrollState);
         };
-    }, [showDragHint]);
+    }, [projects, showDragHint]);
 
     useEffect(() => {
         try {
@@ -88,23 +88,35 @@ export default function Landing() {
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-bold">Our Projects</h2>
                     <div className="hidden md:flex items-center gap-2">
-                        <button aria-label="Scroll left" className="h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center cursor-pointer hover:bg-gray-50" onClick={() => projectsRef.current?.scrollBy({ left: -400, behavior: 'smooth' })}>‹</button>
-                        <button aria-label="Scroll right" className="h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center cursor-pointer hover:bg-gray-50" onClick={() => projectsRef.current?.scrollBy({ left: 400, behavior: 'smooth' })}>›</button>
+                        <button
+                            aria-label="Scroll left"
+                            className={`h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center transition-all ${canScrollLeft ? 'hover:bg-gray-50 cursor-pointer opacity-100' : 'opacity-40 cursor-default'}`}
+                            onClick={() => projectsRef.current?.scrollBy({ left: -400, behavior: 'smooth' })}
+                        >
+                            ‹
+                        </button>
+                        <button
+                            aria-label="Scroll right"
+                            className={`h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center transition-all ${canScrollRight ? 'hover:bg-gray-50 cursor-pointer opacity-100' : 'opacity-40 cursor-default'}`}
+                            onClick={() => projectsRef.current?.scrollBy({ left: 400, behavior: 'smooth' })}
+                        >
+                            ›
+                        </button>
                     </div>
                 </div>
                 {loading && <p>Loading...</p>}
                 <div className="relative">
                     {/* Left edge fade */}
                     {canScrollLeft && (
-                        <div className="pointer-events-none absolute left-0 top-0 h-full w-10 bg-gradient-to-r from-white/95 to-white/0"></div>
+                        <div className="pointer-events-none absolute left-0 top-0 h-full w-10 bg-gradient-to-r from-white/95 to-white/0 z-10"></div>
                     )}
                     {/* Right edge fade */}
                     {canScrollRight && (
-                        <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-white/95 to-white/0"></div>
+                        <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-white/95 to-white/0 z-10"></div>
                     )}
                     {/* Drag hint */}
                     {showDragHint && (
-                        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-2 md:top-0 z-10">
+                        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 -top-2 md:top-0 z-20">
                             <div className="px-3 py-1 rounded-full bg-white shadow ring-1 ring-gray-200 text-xs text-gray-700 animate-pulse">Drag to scroll ↔</div>
                         </div>
                     )}
@@ -117,8 +129,8 @@ export default function Landing() {
                         ))}
                     </div>
                 </div>
-                <img src="/shapes/Ellipse%2024.svg" alt="" className="absolute -top-6 -left-6 w-20 opacity-30" />
-                <img src="/shapes/Ellipse%2025.svg" alt="" className="absolute -bottom-8 -right-10 w-16 opacity-20" />
+                <img src="/shapes/Ellipse%2024.svg" alt="" className="pointer-events-none absolute -top-6 -left-6 w-20 opacity-30" />
+                <img src="/shapes/Ellipse%2025.svg" alt="" className="pointer-events-none absolute -bottom-8 -right-10 w-16 opacity-20" />
             </section>
 
             {/* Happy Clients (Horizontal Scroll) */}
