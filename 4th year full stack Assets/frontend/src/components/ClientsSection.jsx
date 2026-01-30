@@ -31,14 +31,16 @@ export default function ClientsSection({ clients = [], loading }) {
                 <div className="hidden md:flex items-center gap-2">
                     <button
                         aria-label="Scroll left"
-                        className={`h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center transition-all ${canLeft ? 'hover:bg-gray-50 cursor-pointer opacity-100' : 'opacity-40 cursor-default'}`}
+                        className={`h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center transition-all ${canLeft ? 'hover:bg-gray-50 cursor-pointer opacity-100' : 'opacity-40 cursor-not-allowed'}`}
+                        style={{ cursor: canLeft ? 'pointer' : 'not-allowed' }}
                         onClick={() => trackRef.current?.scrollBy({ left: -400, behavior: 'smooth' })}
                     >
                         ‹
                     </button>
                     <button
                         aria-label="Scroll right"
-                        className={`h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center transition-all ${canRight ? 'hover:bg-gray-50 cursor-pointer opacity-100' : 'opacity-40 cursor-default'}`}
+                        className={`h-9 w-9 rounded-full bg-white shadow ring-1 ring-gray-200 grid place-items-center transition-all ${canRight ? 'hover:bg-gray-50 cursor-pointer opacity-100' : 'opacity-40 cursor-not-allowed'}`}
+                        style={{ cursor: canRight ? 'pointer' : 'not-allowed' }}
                         onClick={() => trackRef.current?.scrollBy({ left: 400, behavior: 'smooth' })}
                     >
                         ›
