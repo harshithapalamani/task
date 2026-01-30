@@ -5,7 +5,13 @@ const Client = require('../models/Client');
 async function listClients(req, res, next) {
   try {
     const items = await Client.find().sort({ createdAt: -1 });
-    res.json(items);
+    // Build full image URL for each client
+    const baseUrl = req.protocol + '://' + req.get('host');
+    const mapped = items.map((c) => {
+      const imageUrl = c.image ? (c.image.startsWith('http') ? c.image : `${baseUrl}/uploads/${c.image.replace(/^uploads[\/]/, '')}`) : '';
+      return { ...c.toObject(), image: imageUrl };
+    });
+    res.json(mapped);
   } catch (err) {
     next(err);
   }

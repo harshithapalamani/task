@@ -5,7 +5,13 @@ const Project = require('../models/Project');
 async function listProjects(req, res, next) {
   try {
     const items = await Project.find().sort({ createdAt: -1 });
-    res.json(items);
+    // Build full image URL for each project
+    const baseUrl = req.protocol + '://' + req.get('host');
+    const mapped = items.map((p) => {
+      const imageUrl = p.image ? (p.image.startsWith('http') ? p.image : `${baseUrl}/uploads/${p.image.replace(/^uploads[\/]/, '')}`) : '';
+      return { ...p.toObject(), image: imageUrl };
+    });
+    res.json(mapped);
   } catch (err) {
     next(err);
   }
