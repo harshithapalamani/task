@@ -19,7 +19,7 @@ This is a full-stack web application featuring a landing page and an admin panel
 
 To access the admin panel, use the following credentials:
 
-- **Username:** admin
+- **Username:** admin@example.com
 - **Password:** admin123
 
 ### Admin Panel
@@ -28,8 +28,6 @@ To access the admin panel, use the following credentials:
 - **Client Management**: Add, view, and manage clients (image, name, description, designation).
 - **Contact Form Details**: View all contact form submissions.
 - **Subscribed Emails**: View all newsletter subscribers.
-
-### (Optional Bonus)
 
 - **Image Cropping**: Images uploaded from the admin panel are cropped to a specific ratio before being stored.
 
@@ -40,7 +38,7 @@ To access the admin panel, use the following credentials:
 - **Frontend**: React, Vite, Tailwind CSS
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB Atlas (cloud)
-- **Other**: Docker (for backend), Vercel/Netlify (for frontend deployment)
+- **Other**: Render (for backend), Vercel (for frontend deployment)
 
 ---
 
@@ -128,8 +126,7 @@ To access the admin panel, use the following credentials:
 
 ## Contact
 
-For any queries, contact: [your email]
+For any queries, contact: harshithapalamani@gmail.com
 
----
 
-Replace the placeholders (like deployment links, MongoDB URI, and your email) with your actual details before submission. This README will help reviewers understand, run, and evaluate your project efficiently.
+
