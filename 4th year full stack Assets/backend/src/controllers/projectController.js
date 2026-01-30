@@ -1,3 +1,5 @@
+const path = require('path');
+const fs = require('fs');
 const Project = require('../models/Project');
 
 async function listProjects(req, res, next) {
@@ -22,4 +24,27 @@ async function createProject(req, res, next) {
   }
 }
 
-module.exports = { listProjects, createProject };
+async function deleteProject(req, res, next) {
+  try {
+    const { id } = req.params;
+    const item = await Project.findById(id);
+    if (!item) return res.status(404).json({ error: 'Project not found' });
+
+    if (item.image) {
+      try {
+        const filename = path.basename(item.image);
+        const filePath = path.join(__dirname, '..', '..', 'uploads', filename);
+        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+      } catch (_) {
+        // ignore file deletion errors
+      }
+    }
+
+    await Project.findByIdAndDelete(id);
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+}
+
+module.exports = { listProjects, createProject, deleteProject };

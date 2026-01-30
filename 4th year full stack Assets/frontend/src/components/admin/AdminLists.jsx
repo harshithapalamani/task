@@ -33,6 +33,18 @@ export default function AdminLists() {
         return list.filter((item) => keys.some((k) => String(item[k] || '').toLowerCase().includes(q)));
     };
 
+    const deleteProject = async (id) => {
+        if (!id) return;
+        const sure = window.confirm('Delete this project? This cannot be undone.');
+        if (!sure) return;
+        try {
+            await api.delete(`/projects/${id}`);
+            setProjects((prev) => prev.filter((p) => p._id !== id));
+        } catch (err) {
+            alert(err.response?.data?.error || 'Failed to delete project');
+        }
+    };
+
     const ProjectRow = ({ item }) => (
         <li className="flex items-center gap-3 px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition">
             <img
@@ -47,8 +59,27 @@ export default function AdminLists() {
                 <div className="font-medium truncate">{item.name}</div>
                 <div className="text-xs text-gray-600 truncate">{item.description}</div>
             </div>
+            <button
+                className="ml-auto shrink-0 text-xs bg-red-50 text-red-700 px-3 py-1 rounded border border-red-200 hover:bg-red-100"
+                onClick={() => deleteProject(item._id)}
+                title="Delete"
+            >
+                Delete
+            </button>
         </li>
     );
+
+    const deleteClient = async (id) => {
+        if (!id) return;
+        const sure = window.confirm('Delete this client? This cannot be undone.');
+        if (!sure) return;
+        try {
+            await api.delete(`/clients/${id}`);
+            setClients((prev) => prev.filter((c) => c._id !== id));
+        } catch (err) {
+            alert(err.response?.data?.error || 'Failed to delete client');
+        }
+    };
 
     const ClientRow = ({ item }) => (
         <li className="flex items-center gap-3 px-3 py-2 rounded-lg border border-gray-200 hover:bg-gray-50 transition">
@@ -69,6 +100,13 @@ export default function AdminLists() {
                     <div className="text-xs text-gray-600 truncate">{item.description}</div>
                 )}
             </div>
+            <button
+                className="ml-auto shrink-0 text-xs bg-red-50 text-red-700 px-3 py-1 rounded border border-red-200 hover:bg-red-100"
+                onClick={() => deleteClient(item._id)}
+                title="Delete"
+            >
+                Delete
+            </button>
         </li>
     );
 
