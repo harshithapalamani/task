@@ -38,7 +38,7 @@ To access the admin panel, use the following credentials:
 - **Frontend**: React, Vite, Tailwind CSS
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB Atlas (cloud)
-- **Other**: Docker (for backend), Vercel/Netlify (for frontend deployment)
+- **Other**: Render (for backend), Vercel (for frontend deployment)
 
 ---
 
@@ -127,5 +127,6 @@ To access the admin panel, use the following credentials:
 ## Contact
 
 For any queries, contact: harshithapalamani@gmail.com
+
 
 
